@@ -12,6 +12,6 @@ This report presents the implementation and evaluation of **Monocular Visual Odo
 | **RPE Trans Drift** | **1.6310 m/m** | Translation drift rate (delta=10 m) |
 | **RPE Rot Drift** | **106.7148 deg/100m** | Rotation drift rate (delta=10 m) |
 | **Completeness** | **80.05%** | Matched poses / total ground-truth poses(1565 / 1955) |
-| **Estimated poses** | 2,198 | Trajectory poses in `CameraTrajectory.txt` |
+| **Estimated poses** | **2,198** | Trajectory poses in `CameraTrajectory.txt` |
 
 ---
