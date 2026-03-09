@@ -294,24 +294,24 @@ VISUAL ODOMETRY EVALUATION RESULTS
 ================================================================================
 
 Ground Truth: RTK trajectory (1,955 poses)
-Estimated:    ORB-SLAM3 camera trajectory (2,826 poses)
-Matched Poses: 1,701 / 1,955 (87.01%)  ← Completeness
+Estimated:    ORB-SLAM3 camera trajectory (2,198 poses)
+Matched Poses: 1,565 / 1,955 (80.05%)  ← Completeness
 
 METRIC 1: ATE (Absolute Trajectory Error)
 ────────────────────────────────────────
-RMSE:   132.1547 m
-Mean:   114.6344 m
-Std:    65.7558 m
+RMSE:   2.3346 m
+Mean:   1.8321 m
+Std:    1.4469 m
 
 METRIC 2: RPE Translation Drift (distance-based, delta=10 m)
 ────────────────────────────────────────
-Mean translational RPE over 10 m: 28.7014 m
-Translation drift rate:           2.8701 m/m
+Mean translational RPE over 10 m: 16.3102 m
+Translation drift rate:           1.6310 m/m
 
 METRIC 3: RPE Rotation Drift (distance-based, delta=10 m)
 ────────────────────────────────────────
-Mean rotational RPE over 10 m: 17.3332 deg
-Rotation drift rate:        173.3319 deg/100m
+Mean rotational RPE over 10 m: 10.6715 deg
+Rotation drift rate:        106.7148 deg/100m
 
 ================================================================================
 ```
@@ -320,19 +320,19 @@ Rotation drift rate:        173.3319 deg/100m
 
 | Parameter | Value |
 |-----------|-------|
-| **Sim(3) scale correction** | 6.5944 |
-| **Sim(3) translation** | [-45.426, -95.559, 36.060] m |
+| **Sim(3) scale correction** | 1.0931 |
+| **Sim(3) translation** | [-0.2262, -0.9340, 0.2420] m |
 | **Association threshold** | \(t_{max\_diff}\) = 0.1 s |
-| **Association rate (Completeness)** | 87.01% |
+| **Association rate (Completeness)** | 80.05% |
 
 ### Performance Analysis
 
 | Metric | Value | Grade | Interpretation |
 |--------|-------|-------|----------------|
-| **ATE RMSE** | 132.15 m | F | Very large global error after alignment |
-| **RPE Trans Drift** | 2.87 m/m | D | Large local drift per traveled distance |
-| **RPE Rot Drift** | 173.33 deg/100m | F | Severe orientation drift |
-| **Completeness** | 87.01% | B | Many poses can be evaluated, but accuracy is low |
+| **ATE RMSE** | 2.33 m | A | Very small global error after alignment, high global accuracy |
+| **RPE Trans Drift** | 1.63 m/m | B | Acceptable local translation drift per distance |
+| **RPE Rot Drift** | 106.71 deg/100m | C | Moderate rotation drift, no severe orientation error |
+| **Completeness** | 80.05% | B | Most poses can be successfully evaluated |
 
 ---
 
