@@ -1,6 +1,6 @@
 # AAE5303 Assignment: Visual Odometry with ORB-SLAM3
 
-## Executive Summary
+## 📊 Executive Summary
 
 This report presents the implementation and evaluation of **Monocular Visual Odometry (VO)** using the **ORB-SLAM3** framework on the **HKisland_GNSS03** UAV aerial imagery dataset. The project evaluates trajectory accuracy against RTK ground truth using **four parallel, monocular-appropriate metrics** computed with the `evo` toolkit.
 
@@ -16,7 +16,7 @@ This report presents the implementation and evaluation of **Monocular Visual Odo
 
 ---
 
-## Introduction
+## 📖 Introduction
 
 ### Background
 
@@ -51,7 +51,7 @@ This assignment evaluates:
 
 ---
 
-## Methodology
+## 🔬 Methodology
 
 ### ORB-SLAM3 Visual Odometry Overview
 
@@ -194,7 +194,7 @@ Here, `matched_poses` is the number of pose pairs successfully associated by evo
 
 ---
 
-## Dataset Description
+## 📁 Dataset Description
 
 ### HKisland_GNSS03 Dataset
 
@@ -231,7 +231,7 @@ RTK (Real-Time Kinematic) GPS provides centimeter-level positioning accuracy:
 
 ---
 
-## Implementation Details
+## ⚙️ Implementation Details
 
 ### System Configuration
 
@@ -342,14 +342,14 @@ Rotation drift rate:        106.7148 deg/100m
 
 ![Trajectory Evaluation](https://github.com/lorelleh/assignment2/blob/3b74b37357a7b9544aaddd4deb5fc78f32525b4d/image/Trajectory%20Comparison.png)
 
-This figure is generated from the same inputs used for evaluation (`ground_truth.txt` and `CameraTrajectory.txt`) and includes:
+This figure is generated from the same inputs used for evaluation (`ground_truth.tum` and `CameraTrajectory_sec.tum`) and includes:
 
 1. **Top-Left**: 2D trajectory before alignment (matched poses only). This reveals scale/rotation mismatch typical for monocular VO.
 2. **Top-Right**: 2D trajectory after Sim(3) alignment (scale corrected). Remaining discrepancy reflects drift and local tracking errors.
 3. **Bottom-Left**: Distribution of ATE translation errors (meters) over all matched poses.
 4. **Bottom-Right**: ATE translation error as a function of the matched pose index (highlights where drift accumulates).
 
-**Reproducibility**: the figure can be regenerated using `scripts/generate_report_figures.py` together with the `--save_results` output from `evo_ape`.
+**Reproducibility**: the figure can be regenerated using `scripts/evaluate_vo_accuracy.py` (which integrates `evo_ape` functionality) together with the `--save_results` output.
 
 ---
 
