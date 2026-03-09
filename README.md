@@ -16,7 +16,7 @@ This report presents the implementation and evaluation of **Monocular Visual Odo
 
 ---
 
-## 📖 Introduction
+## Introduction
 
 ### Background
 
@@ -51,7 +51,7 @@ This assignment evaluates:
 
 ---
 
-## 🔬 Methodology
+## Methodology
 
 ### ORB-SLAM3 Visual Odometry Overview
 
@@ -231,7 +231,7 @@ RTK (Real-Time Kinematic) GPS provides centimeter-level positioning accuracy:
 
 ---
 
-## ⚙️ Implementation Details
+## Implementation Details
 
 ### System Configuration
 
@@ -246,21 +246,21 @@ RTK (Real-Time Kinematic) GPS provides centimeter-level positioning accuracy:
 
 ```yaml
 Camera.type: "PinHole"
-Camera.fx: 1444.43
-Camera.fy: 1444.34
-Camera.cx: 1179.50
-Camera.cy: 1044.90
+Camera1.fx: 1444.43
+Camera1.fy: 1444.34
+Camera1.cx: 1179.50
+Camera1.cy: 1044.90
 
-Camera.k1: -0.0560
-Camera.k2: 0.1180
-Camera.p1: 0.00122
-Camera.p2: 0.00064
-Camera.k3: -0.0627
+Camera1.k1: -0.0560
+Camera1.k2: 0.1180
+Camera1.p1: 0.00122
+Camera1.p2: 0.00064
+Camera1.k3: -0.0627
 
 Camera.width: 2448
 Camera.height: 2048
 Camera.fps: 10.0
-Camera.RGB: 0  # OpenCV images are typically BGR by default
+Camera.RGB: 1  # OpenCV default is BGR, here set to RGB
 ```
 
 **Note on ORB-SLAM3 settings format**:
