@@ -194,7 +194,7 @@ Here, `matched_poses` is the number of pose pairs successfully associated by evo
 
 ---
 
-## 📁 Dataset Description
+## Dataset Description
 
 ### HKisland_GNSS03 Dataset
 
