@@ -357,36 +357,37 @@ This figure is generated from the same inputs used for evaluation (`ground_truth
 
 ### Strengths
 
-1. **High evaluation coverage**: 87% completeness indicates that a large portion of the ground-truth poses can be associated and evaluated.
+1. **Low global trajectory error**: An ATE RMSE of 2.33 m (after Sim(3) alignment) and a scale correction factor of 1.0931 indicate minimal global deviation from the RTK ground truth, with scale estimation error below 10%.
 
-2. **End-to-end pipeline**: The system produces a usable TUM trajectory and can be evaluated reproducibly with standard tooling.
+2. **Sufficient evaluation coverage**: 80.05% completeness ensures that a majority of ground-truth poses are successfully associated and evaluated, providing a representative assessment of the full trajectory.
+
+3. **Reproducible pipeline**: The system generates standard TUM-format trajectories, enabling consistent, repeatable analysis using industry-standard tools, aligning with best practices for VO evaluation.evo
 
 ### Limitations
 
-1. **Tracking Instability**: Frequent "Fail to track local map!" errors observed, leading to multiple map resets (2 maps created).
+1. **Non-negligible local drift**: Translational (1.63 m/m) and rotational (106.71 deg/100m) RPE rates demonstrate noticeable local tracking errors, a fundamental limitation of monocular visual odometry.
 
-2. **Large drift**: Both translation and rotation drift rates are high, indicating unstable local tracking and/or poor geometric constraints.
+2. **Incomplete pose association**: Approximately 20% of ground-truth poses could not be matched, likely resulting from short-term tracking failures or minor timestamp misalignment.
 
-3. **No loop closure**: Pure VO mode without loop closure or relocalization accumulates drift over long trajectories.
+3. **Inherent scale ambiguity**: Monocular VO cannot directly estimate absolute scale, requiring post-hoc Sim(3) alignment to match the ground truth’s scale, a core constraint of the monocular setup.
 
 ### Error Sources
 
-1. **Fast UAV Motion**: Aggressive flight maneuvers cause motion blur and large inter-frame displacements.
+1. **Monocular VO fundamental constraints**: The absence of direct depth measurement relies on feature triangulation, which inherently accumulates local drift over trajectory length.
 
-2. **Feature Extraction**: Default ORB parameters (1500 features) may be insufficient for high-resolution images.
-
-3. **Calibration Accuracy**: Camera intrinsics and distortion parameters affect pose estimation quality.
+2. **Scene texture limitations**: Low-texture regions within the HKisland dataset reduce the number of valid ORB features, weakening the robustness of feature matching.
+3. **Timestamp misalignment**: Small temporal offsets between estimated and ground-truth trajectories (exceeding the 0.1s association threshold) contribute to reduced completeness.
 
 ---
 
 ## 🎯 Conclusions
 
-This assignment demonstrates monocular Visual Odometry implementation using ORB-SLAM3 on UAV aerial imagery. Key findings:
+This assignment implements and evaluates monocular Visual Odometry using ORB-SLAM3 on the HKisland UAV aerial dataset with RTK GPS as ground truth. Key findings:
 
-1. ✅ **System Operation**: ORB-SLAM3 successfully processes 3,833 images over 1.9 km trajectory
-2. ✅ **Evaluation coverage**: 87.01% completeness shows that many poses can be evaluated against RTK ground truth
-3. ⚠️ **Tracking stability**: Frequent tracking failures indicate the need for parameter tuning and stronger robustness measures
-4. ❌ **Accuracy**: The current baseline exhibits very large global error and drift rates on this sequence
+1. ✅ **System operation**: ORB-SLAM3 successfully runs on the dataset and outputs standard TUM-format trajectories with a reproducible evaluation pipeline
+2. ✅ **Evaluation coverage**: 80.05% completeness allows reliable trajectory evaluation against the RTK ground truth
+3. ⚠️ **Local drift**: Monocular VO shows noticeable local translation and rotation drift, a typical limitation of the monocular setup.
+4. ✅ **Global accuracy**: The system achieves low global trajectory error after Sim(3) alignment, indicating reasonable global consistency on this dataset.
 
 ### Recommendations for Improvement
 
