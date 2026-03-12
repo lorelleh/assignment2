@@ -393,10 +393,10 @@ This assignment implements and evaluates monocular Visual Odometry using ORB-SLA
 
 | Priority | Action | Expected Improvement |
 |----------|--------|---------------------|
-| High | Increase `nFeatures` to 2000-2500 | 30-40% ATE reduction |
-| High | Lower FAST thresholds (15/5) | 20-30% RPE reduction |
-| Medium | Verify camera calibration | 15-25% overall improvement |
-| Low | Enable IMU fusion (VIO mode) | 50-70% accuracy improvement |
+| High | Increase `nFeatures` to 2000-2500 | Reduce local drift and improve tracking stability |
+| High | Lower FAST thresholds (15/5) | 	Improve feature matching in low‑texture regions |
+| Medium | Refine camera calibration parameters | Reduce systematic geometric errors |
+| Low | Enable IMU fusion (VIO mode) | Suppress drift and improve pose estimation robustness |
 
 ---
 
@@ -408,7 +408,7 @@ This assignment implements and evaluates monocular Visual Odometry using ORB-SLA
 
 3. Geiger, A., Lenz, P., & Urtasun, R. (2012). **Are we ready for Autonomous Driving? The KITTI Vision Benchmark Suite**. *IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*.
 
-4. MARS-LVIG Dataset: https://mars.hku.hk/dataset.html
+4. HKisland_GNSS03 Dataset: https://mars.hku.hk/dataset.html
 
 5. ORB-SLAM3 GitHub: https://github.com/UZ-SLAMLab/ORB_SLAM3
 
@@ -423,13 +423,13 @@ AAE5303_assignment2_orbslam3_demo-/
 ├── README.md                    # This report
 ├── requirements.txt             # Python dependencies
 ├── figures/
-│   └── trajectory_evaluation.png
+│   └── Trajectory Comparison.png  # Trajectory evaluation figure
 ├── output/
 │   └── evaluation_report.json
 ├── scripts/
-│   └── evaluate_vo_accuracy.py
+│   └── evaluate_vo_accuracy.py   # Core VO evaluation script
 ├── docs/
-│   └── camera_config.yaml
+│   └── HKisland_Mono.yaml        # ORB-SLAM3 monocular config for HKisland
 └── leaderboard/
     ├── README.md
     ├── LEADERBOARD_SUBMISSION_GUIDE.md
@@ -439,26 +439,29 @@ AAE5303_assignment2_orbslam3_demo-/
 ### B. Running Commands
 
 ```bash
-# 1. Extract images from ROS bag
+# 1. Extract images from ROS bag (HKisland_GNSS03 sequence)
 python3 extract_images_final.py HKisland_GNSS03.bag --output extracted_data
 
-# 2. Run ORB-SLAM3 VO
+# 2. Run ORB-SLAM3 Monocular VO
 ./Examples/Monocular/mono_tum \
     Vocabulary/ORBvoc.txt \
-    Examples/Monocular/DJI_Camera.yaml \
+    Examples/Monocular/HKisland_Mono.yaml \
     data/extracted_data
 
-# 3. Extract RTK ground truth
-python3 extract_rtk_groundtruth.py HKisland_GNSS03.bag --output ground_truth.txt
+# 3. Extract RTK ground truth (convert to TUM format)
+python3 extract_rtk_groundtruth.py HKisland_GNSS03.bag --output ground_truth.tum
 
-# 4. Evaluate trajectory
+# 4. Correct camera trajectory timestamps (generate sec-formatted TUM file)
+# (Note: Preprocessing step for timestamp alignment)
+python3 correct_trajectory_timestamps.py CameraTrajectory.txt --output CameraTrajectory_sec.tum
+
+# 5. Evaluate trajectory (core evaluation command)
 python3 scripts/evaluate_vo_accuracy.py \
-    --groundtruth ground_truth.txt \
-    --estimated CameraTrajectory.txt \
+    --groundtruth ground_truth.tum \
+    --estimated CameraTrajectory_sec.tum \
     --t-max-diff 0.1 \
     --delta-m 10 \
-    --workdir evaluation_results \
-    --json-out evaluation_results/metrics.json
+    --workdir evaluation_results
 ```
 
 ### D. Native evo Commands (Recommended)
@@ -467,19 +470,19 @@ If you prefer to run evo directly (no custom scripts), use:
 
 ```bash
 # ATE (Sim(3) alignment + scale correction)
-evo_ape tum ground_truth.txt CameraTrajectory.txt \
+evo_ape tum ground_truth.tum CameraTrajectory_sec.tum \
   --align --correct_scale \
   --t_max_diff 0.1 -va
 
 # RPE translation (distance-based, delta = 10 m)
-evo_rpe tum ground_truth.txt CameraTrajectory.txt \
+evo_rpe tum ground_truth.tum CameraTrajectory_sec.tum \
   --align --correct_scale \
   --t_max_diff 0.1 \
   --delta 10 --delta_unit m \
   --pose_relation trans_part -va
 
 # RPE rotation angle (degrees, distance-based, delta = 10 m)
-evo_rpe tum ground_truth.txt CameraTrajectory.txt \
+evo_rpe tum ground_truth.tum CameraTrajectory_sec.tum \
   --align --correct_scale \
   --t_max_diff 0.1 \
   --delta 10 --delta_unit m \
